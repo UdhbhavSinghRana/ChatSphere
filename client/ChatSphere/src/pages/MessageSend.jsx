@@ -2,7 +2,7 @@ import React from 'react'
 
 function MessageSend() {
   return (
-    <div className='flex h-full w-full border-2 text-slate-50'>
+    <div className='flex h-full border-2 border-slate-400 text-slate-50 p-2 rounded-md bg-blue-600 justify-center inline-block'>
         hi
     </div>
   )
