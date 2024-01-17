@@ -1,12 +1,19 @@
-import React from 'react'
-import MessageSend from './MessageSend'
+import React from 'react';
+import MessageSend from './MessageSend';
+import MessageReceive from './MessageRecive';
 
 function TextBox() {
   return (
-    <div className=''>
-        <MessageSend />
+    
+    <div className='flex flex-col '>
+        <div className='flex items-center p-4'>
+            <MessageReceive />
+        </div>
+        <div className='flex items-center justify-end p-4'>
+            <MessageSend />
+        </div>
     </div>
-  )
+  );
 }
 
-export default TextBox
+export default TextBox;
