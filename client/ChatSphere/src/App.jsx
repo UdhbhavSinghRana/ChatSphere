@@ -1,9 +1,10 @@
+import React from 'react';
+import Home from './pages/Home.jsx'
+
 export default function App() {
-  return (
-      <>
-        <div className="container border-2 flex justify-center items-center ">
-            hello
-        </div>
-      </>
-  )
+    return (
+        <>
+            <Home />
+        </>
+    )
 }
