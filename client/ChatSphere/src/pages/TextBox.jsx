@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MessageSend from './MessageSend';
 import MessageReceive from './MessageRecive';
 import SendMessage from './SendMessage';
-
 function TextBox() {
+  const [messages, setMessages] = useState([]);
+  const handleSendMessage = (message) => {
+    setMessages([...messages, message]);
+    console.log(message);
+  }
   return (
     <div className='flex flex-col h-full overflow-scroll'>
-        <div className='flex flex-col items-start justify-center  p-4'>
+        <div className='flex flex-col items-start justify-center p-4'>
             <MessageReceive />
             <MessageReceive />
             <MessageReceive />
@@ -20,18 +24,13 @@ function TextBox() {
 
             
         </div>
-        <div className='flex flex-col justify-center items-end p-4'>
-            <MessageSend />
-            <MessageSend />
-            <MessageSend />
-            <MessageSend />
-            <MessageSend />
-            <MessageSend />
-
+        <div className='flex flex-col justify-center items-end p-4 mb-12 scroll-smooth container-snap'>
+        {messages.map((message, index) => (
+          <MessageSend key={index} value={message} />
+        ))}
         </div>
         <div className='w-full bottom-0 h-full border-2 justify-end'>
-
-            <SendMessage />
+            <SendMessage onSendMessage={handleSendMessage}/>
         </div>
     </div>
   );
