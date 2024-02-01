@@ -5,14 +5,32 @@ import SendMessage from './SendMessage';
 
 function TextBox() {
   return (
-    <div className='flex flex-col '>
-        <div className='flex items-center p-4'>
+    <div className='flex flex-col h-full overflow-scroll'>
+        <div className='flex flex-col items-start justify-center  p-4'>
             <MessageReceive />
+            <MessageReceive />
+            <MessageReceive />
+            <MessageReceive />
+            <MessageReceive />
+            <MessageReceive />
+            <MessageReceive />
+            <MessageReceive />
+            <MessageReceive />
+            <MessageReceive />
+
+            
         </div>
-        <div className='flex items-center justify-end p-4'>
+        <div className='flex flex-col justify-center items-end p-4'>
             <MessageSend />
+            <MessageSend />
+            <MessageSend />
+            <MessageSend />
+            <MessageSend />
+            <MessageSend />
+
         </div>
-        <div className='w-full bottom-0'>
+        <div className='w-full bottom-0 h-full border-2 justify-end'>
+
             <SendMessage />
         </div>
     </div>
