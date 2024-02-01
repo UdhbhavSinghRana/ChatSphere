@@ -2,11 +2,11 @@ import React from 'react';
 
 function SendMessage() {
   return (
-    <div>
-        <div className="h-16 flex justify-center items-center bg-[#092b3d] bottom-0 w-full">
+    <div className='h-full w-full flex items-end'>
+        <div className="h-16 flex bottom-0 justify-center items-center bg-[#092b3d] w-full ">
             <form className="w-full flex justify-center items-center">
                 <div className="input-wrapper w-2/3 relative">
-                    <input className="w-full py-2 pl-5 pr-12 bg-[#0b3b55] rounded-md focus:outline-none" value="" />
+                    <input className="w-full py-2 pl-5 pr-12 bg-[#0b3b55] rounded-md focus:outline-none text-white"/>
                     <svg
                         stroke="currentColor"
                         fill="currentColor"
