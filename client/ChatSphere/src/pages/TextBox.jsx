@@ -24,12 +24,12 @@ function TextBox() {
 
             
         </div>
-        <div className='flex flex-col justify-center items-end p-4 mb-12 scroll-smooth container-snap'>
-        {messages.map((message, index) => (
-          <MessageSend key={index} value={message} />
-        ))}
+        <div className='flex flex-col justify-center items-end p-4 mb-12 '>
+            {messages.map((message, index) => (
+              <MessageSend key={index} value={message} />
+            ))}
         </div>
-        <div className='w-full bottom-0 h-full border-2 justify-end'>
+        <div className='w-full bottom-0 h-full justify-end'>
             <SendMessage onSendMessage={handleSendMessage}/>
         </div>
     </div>
