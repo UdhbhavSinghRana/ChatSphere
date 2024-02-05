@@ -11,7 +11,7 @@ function TextBox() {
   const [receiveMessages, setReceiveMessages] = useState([]);
 
   useEffect(() => {
-    messageLogRef.current.scrollIntoView({ behavior: "smooth" });
+    messageLogRef.current.scrollIntoView({ behavior: "smooth", block: "end"});
   }
   ,[messages]);
 
