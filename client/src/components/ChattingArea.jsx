@@ -17,8 +17,13 @@ const ChattingArea = () => {
         }
 
         const onReceiveMessage = (message) => {
-            setMessages(prevMessage => {
-                return [...prevMessage, message]
+            const newReceivedMessage = {
+                type: 'received',
+                data: message
+            };
+
+            setMessages(prevMessages => {
+                return [...prevMessages, newReceivedMessage];
             })
         }
 
@@ -33,7 +38,16 @@ const ChattingArea = () => {
         }
     }, [])
 
-    const handleSendMessage = (message) => {
+    const handleSentMessage = (message) => {
+        const newSentMessage = {
+            type: 'sent',
+            data: message
+        };
+
+        setMessages(prevMessages => {
+            return [...prevMessages, newSentMessage];
+        })
+
         socket.emit('send-message', message);
     }
 
@@ -46,7 +60,7 @@ const ChattingArea = () => {
                         Testing User
                     </div>
                     <Messages messages={messages} />
-                    <MessageInput onSendMessage={handleSendMessage} />
+                    <MessageInput onSendMessage={handleSentMessage} />
                 </div>
             )}
         </>
