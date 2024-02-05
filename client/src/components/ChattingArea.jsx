@@ -1,22 +1,14 @@
-import SendMessage from "./SendMessage";
+import { useState } from "react";
+import Messages from "./Messages";
+import MessageInput from "./MessageInput";
 
-function ChattingArea() {
-    // const messageLogRef = useRef(null);
-    // const [messages, setMessages] = useState([]);
-    // const [receiveMessages, setReceiveMessages] = useState([]);
+const ChattingArea = () => {
+    const [messages, setMessages] = useState([]);
 
-    // useEffect(() => {
-    //     messageLogRef.current.scrollIntoView({ behavior: "smooth" });
-    // }, [messages]);
-
-    // const handleSendMessage = (message) => {
-    //     setMessages([...messages, message]);
-    //     socket.emit("send-message", message);
-    // }
-
-    // socket.on("receive-message", (message) => {
-    //     setReceiveMessages([...receiveMessages, message]);
-    // });
+    const handleSendMessage = (message) => {
+        {/* TODO: sending of message through socket event */ }
+        setMessages(prevMessages => [...prevMessages, message]);
+    }
 
     return (
         <div className='flex flex-col w-full'>
@@ -24,8 +16,8 @@ function ChattingArea() {
                 {/* TODO: Here goes the username of person you are talking to*/}
                 Testing User
             </div>
-            <div className='flex-grow'>Testing</div>
-            <SendMessage />
+            <Messages messages={messages} />
+            <MessageInput onSendMessage={handleSendMessage} />
         </div>
     );
 }

@@ -11,10 +11,10 @@ const Messages = ({ messages }) => {
     }, [messages])
 
     return (
-        <div className='border border-blue-500 flex-grow overflow-y-auto p-3'>
-            <div className='border border-red-500 flex flex-col gap-3' ref={messageLogsRef}>
+        <div className='flex-grow overflow-y-auto p-3'>
+            <div className='flex flex-col gap-3' ref={messageLogsRef}>
                 {messages.map((message, index) => (
-                    <div key={index} className='border border-pink-500 ronded-3/4 px-2 py-1 text-white'>{message}</div>
+                    <div key={index} className='border border-pink-500 rounded-3xl px-3 py-2 w-fit text-white'>{message}</div>
                 ))}
             </div>
         </div>
