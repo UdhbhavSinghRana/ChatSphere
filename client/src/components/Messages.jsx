@@ -11,10 +11,16 @@ const Messages = ({ messages }) => {
     }, [messages])
 
     return (
-        <div className='flex-grow overflow-y-auto p-3'>
-            <div className='flex flex-col gap-3' ref={messageLogsRef}>
+        <div className='flex-grow overflow-y-auto px-4 pt-4 pb-1'>
+            <div className='flex flex-col' ref={messageLogsRef}>
                 {messages.map((message, index) => (
-                    <div key={index} className='border border-pink-500 rounded-3xl px-3 py-2 w-fit text-white'>{message}</div>
+                    <div
+                        key={index}
+                        className={`
+                            h-full w-fit mb-2 text-slate-50 px-3 py-2 rounded-full justify-center inline-block'>
+                            ${message.type === 'sent' ? 'bg-blue-600 self-end' : 'bg-gray-600'}
+                        `}
+                    >{message.data}</div>
                 ))}
             </div>
         </div>

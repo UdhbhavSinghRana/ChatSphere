@@ -5,8 +5,6 @@ const MessageInput = ({ onSendMessage }) => {
 
     const handleSendMessage = (event) => {
         event.preventDefault();
-
-        // Edge case handling for empty input
         if (inputMessage.length === 0) return;
 
         onSendMessage(inputMessage);
@@ -14,7 +12,7 @@ const MessageInput = ({ onSendMessage }) => {
     }
 
     return (
-        <div className="h-16 p-3.5 bg-[#092b3d]">
+        <div className="h-16 p-4 bg-[#092b3d]">
             <form onSubmit={handleSendMessage} className='relative h-full w-full'>
                 <input
                     className="h-full w-full rounded-md bg-[#0b3b55] px-3 py-2 outline-none text-sm text-white"
