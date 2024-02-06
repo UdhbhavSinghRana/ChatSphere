@@ -6,8 +6,7 @@ import MessageReceive from './MessageRecive';
 import { io } from "socket.io-client";
 
 function Home() {
-    const socket = io("http://localhost:3000");
-    document.getElementById('root').className="h-screen"
+    document.getElementById('root').className="h-screen";
     return (
         <>
             <div className="container flex h-full bg-[#152639]">
