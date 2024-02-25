@@ -4,6 +4,7 @@ import { Server } from 'socket.io';
 import userRouter from './routes/users.mjs';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import User from './models/users.mjs';
 dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI;
@@ -48,3 +49,14 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
         console.error("Error connecting to MongoDB:", error);
         process.exit(1); // Exit the process if MongoDB connection fails
     });
+
+main();
+async function main() {
+    const user = new User({
+        username: "Bhavya",
+        password: "24120Bhavya",
+        email: "Bhavya0366.be21@chitkara.edu.in"
+    })
+    await user.save();
+    console.log(user);
+}
