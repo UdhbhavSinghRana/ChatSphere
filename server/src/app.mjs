@@ -1,7 +1,7 @@
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
-import userRouter from './routes/users.mjs';
+import userRouter from './routes/userRouter.mjs';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import User from './models/users.mjs';
@@ -12,6 +12,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const PORT = process.env.PORT ?? 3000;
 
 const app = express();
+app.use(express.json());
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
@@ -35,6 +36,8 @@ app.get('/health', (_req, res) => {
     res.send({ health: 'OK' })
 })
 
+app.use('/users', userRouter);
+
 // Mongoose connection
 
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -50,13 +53,13 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
         process.exit(1); // Exit the process if MongoDB connection fails
     });
 
-main();
-async function main() {
-    const user = new User({
-        username: "Bhavya",
-        password: "24120Bhavya",
-        email: "Bhavya0366.be21@chitkara.edu.in"
-    })
-    await user.save();
-    console.log(user);
-}
+// main();
+// async function main() {
+//     const user = new User({
+//          username: "Bhavya",
+//         password: "24120Bhavya",
+//         email: "Bhavya0366.be21@chitkara.edu.in"
+//     })
+//     await user.save();
+//     console.log(user);
+// }
