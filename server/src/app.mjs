@@ -4,8 +4,9 @@ import { Server } from 'socket.io';
 import userRouter from './routes/userRouter.mjs';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors'; // Import the cors middleware
 import User from './models/users.mjs';
-import { notFound, errorHandler } from './middleware/errorMiddleware.mjs';
+import { notFound, errorHandler } from '../src/middleware/errorHandler.mjs';
 dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI;
@@ -13,13 +14,21 @@ const MONGO_URI = process.env.MONGO_URI;
 const PORT = process.env.PORT ?? 3000;
 
 const app = express();
+
+app.use(cors());
+
 app.use(express.json());
+
+// Use the cors middleware to enable CORS for all routes
+
+
 const server = createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5173"
+      origin: "*",
+      methods: ["GET", "POST"]
     }
-});
+  });  
 
 io.on("connection", socket => {
     console.log(`${socket.id} connected`);

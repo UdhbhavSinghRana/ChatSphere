@@ -2,12 +2,6 @@ import User from '../models/users.mjs';
 import generateToken from '../config/generateToken.mjs';
 
 const registerUser = async (req, res) => {
-    //console.log(req.body); // q: why is this undefined?
-    //a : because we are not parsing the body of the request
-    //q : how to parse the body of the request?
-    //a : by using the body-parser middleware
-    //q : give me the code for that
-    //a : app.use(express.json()) in app.mjs
 
     const {name, password, email} = req.body;
     if (!name || !email || !password) {
@@ -27,9 +21,10 @@ const registerUser = async (req, res) => {
     });
 
     try {
-        console.log(user.email);
+        console.log(user);
         await user.save();
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: "Something went wrong"});
     }
 }
