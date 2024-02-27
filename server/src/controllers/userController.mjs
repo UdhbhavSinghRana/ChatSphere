@@ -2,7 +2,7 @@ import User from '../models/users.mjs';
 import generateToken from '../config/generateToken.mjs';
 
 const registerUser = async (req, res) => {
-    console.log(req.body); // q: why is this undefined?
+    //console.log(req.body); // q: why is this undefined?
     //a : because we are not parsing the body of the request
     //q : how to parse the body of the request?
     //a : by using the body-parser middleware
@@ -21,21 +21,31 @@ const registerUser = async (req, res) => {
     }
 
     const user = new User({
-        name,
-        email,
-        password
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password
     });
 
     try {
-        res.status(201).json({
-            _id : user._id,
-            name : user.name,
-            email : user.email,
-            token : generateToken(user._id)
-        })
+        console.log(user.email);
+        await user.save();
     } catch (error) {
         res.status(500).json({message: "Something went wrong"});
     }
 }
 
-export default registerUser;
+const authUser = async (req, res) => {
+    const {email, password} = req.body;
+    const user = await User.findOne({email});
+
+    if (user && (await user.matchPassword(password))) {
+        res.json ({
+            _id : user._id,
+            name : user.name,
+            email : user.email,
+            token : generateToken(user._id)
+        });
+    }
+}
+
+export {registerUser, authUser};

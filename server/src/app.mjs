@@ -5,6 +5,7 @@ import userRouter from './routes/userRouter.mjs';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import User from './models/users.mjs';
+import { notFound, errorHandler } from './middleware/errorMiddleware.mjs';
 dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI;
@@ -36,7 +37,10 @@ app.get('/health', (_req, res) => {
     res.send({ health: 'OK' })
 })
 
-app.use('/users', userRouter);
+app.use('/api/users', userRouter);
+
+app.use(notFound);
+app.use(errorHandler);
 
 // Mongoose connection
 
