@@ -76,12 +76,13 @@
 
         const handleSubmit = async (e) => {
             e.preventDefault();
-            if (!Name || !Email || !Password) {
-                alert("Please fill all the fields");
-                return;
-            }
+            
             if (tf){
                 console.log("Create")
+                if (!Name || !Email || !Password) {
+                    alert("Please fill all the fields");
+                    return;
+                }
                 try {
                     const config = {
                         headers: {
@@ -90,7 +91,7 @@
                     };
                     const {data} = await axios.post(
                         "http://localhost:3000/api/users",
-                        { Name, Password, Email },
+                        { name: Name, password: Password, email: Email },
                         config
                     );
                     localStorage.setItem("userInfo", JSON.stringify(data));
@@ -102,6 +103,28 @@
             }
             else {
                 console.log("Login")
+                if (!Email || !Password) {
+                    alert("Please fill all the fields");
+                    return;
+                }
+                try {
+                    const config = {
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    };
+                    const {data} = await axios.post(
+                        "http://localhost:3000/api/users/login",
+                        { email: Email, password: Password },
+                        config
+                    );
+                    localStorage.setItem("userInfo", JSON.stringify(data));
+                    navigate("/chat");
+                
+                }
+                catch (err) {
+                    console.log(err);
+                }
             }
         }
 
