@@ -18,6 +18,8 @@ const app = express();
 app.use(cors());
 
 app.use(express.json());
+app.use('/api/users', userRouter);
+
 
 // Use the cors middleware to enable CORS for all routes
 
@@ -46,7 +48,6 @@ app.get('/health', (_req, res) => {
     res.send({ health: 'OK' })
 })
 
-app.use('/api/users', userRouter);
 
 app.use(notFound);
 app.use(errorHandler);

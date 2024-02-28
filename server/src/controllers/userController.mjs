@@ -1,7 +1,9 @@
 import User from '../models/users.mjs';
 import generateToken from '../config/generateToken.mjs';
+import expressAsyncHandler from 'express-async-handler';
+import bcrypt from "bcrypt";
 
-const registerUser = async (req, res) => {
+const registerUser = expressAsyncHandler (async (req, res) => {
 
     const {name, password, email} = req.body;
     if (!name || !email || !password) {
@@ -12,23 +14,29 @@ const registerUser = async (req, res) => {
 
     if (userExist) {
         res.status(400).json({message: "User already exists"});
+        return;
     }
-
-    const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password
-    });
 
     try {
-        console.log(user);
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        const user =new User({
+            name: req.body.name,
+            email: req.body.email,
+            password : hashedPassword
+        });
         await user.save();
-        res.status(200).json({message:"Send succesfully"});
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message: "Something went wrong"});
+        res.status(201).json({
+            _id : user._id,
+            name : user.name,
+            email : user.email,
+            token : generateToken(user._id)
+        });
     }
-}
+    catch (err){
+        console.log(err);
+        res.status(400).json({message: "Invalid user data"});
+    }
+});
 
 const authUser = async (req, res) => {
     const {email, password} = req.body;
