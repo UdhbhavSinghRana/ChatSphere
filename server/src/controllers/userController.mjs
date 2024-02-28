@@ -52,4 +52,34 @@ const authUser = async (req, res) => {
     }
 }
 
-export {registerUser, authUser};
+const allUsers = async (req, res) => {
+    const keyword = req.query.search ? {
+        $or: [
+            {
+                name: {
+                    $regex: req.query.search,
+                    $options: 'i'
+                }
+            },
+            {
+                email: {
+                    $regex: req.query.search,
+                    $options: 'i'
+                }
+            }
+        ],
+        _id: { $ne: req.user._id } // Exclude the currently logged-in user
+    } : { _id: { $ne: req.user._id } }; // If no search query, still exclude the currently logged-in user
+
+    try {
+        const users = await User.find(keyword);
+        res.send(users);
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
+
+export {registerUser, authUser, allUsers};
