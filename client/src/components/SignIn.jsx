@@ -89,7 +89,7 @@
                             "Content-Type": "application/json",
                         },
                     };
-                    const {data} = await axios.post(
+                    const {data} = await    .post(
                         "http://localhost:3000/api/users",
                         { name: Name, password: Password, email: Email },
                         config

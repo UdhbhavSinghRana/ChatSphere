@@ -7,10 +7,10 @@ import dotenv from 'dotenv';
 import cors from 'cors'; // Import the cors middleware
 import User from './models/users.mjs';
 import { notFound, errorHandler } from '../src/middleware/errorHandler.mjs';
+import chatRouter from './routes/chatRouter.mjs';
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI;
-
+const MONGO_URI = process.env.MONGO_URI; 
 const PORT = process.env.PORT ?? 3000;
 
 const app = express();
@@ -19,6 +19,7 @@ app.use(cors());
 
 app.use(express.json());
 app.use('/api/users', userRouter);
+app.use('/api/chat', chatRouter);
 
 
 // Use the cors middleware to enable CORS for all routes
@@ -66,14 +67,3 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
         console.error("Error connecting to MongoDB:", error);
         process.exit(1); // Exit the process if MongoDB connection fails
     });
-
-// main();
-// async function main() {
-//     const user = new User({
-//          username: "Bhavya",
-//         password: "24120Bhavya",
-//         email: "Bhavya0366.be21@chitkara.edu.in"
-//     })
-//     await user.save();
-//     console.log(user);
-// }
