@@ -65,4 +65,36 @@ const fetchChat = expressAsyncHandler(async (req, res) => {
     }
 });
 
+const createGroupChat = expressAsyncHandler(async (req, res) => {
+    if (!req.body.name || !req.body.users) {
+        return res.status(400).json({ message: "Please fill all the fields" });
+    }
+    var users = JSON.parse(req.body.users);
+
+    if (users.length < 2) {
+        return res.status(400).json({ message: "Please add more than one user" });
+    }
+
+    users.push(req.user._id);
+
+    try {
+        const groupChat = await Chat.create({
+            chatName: req.body.name,
+            isGroupChat: true,
+            users: users,
+            groupAdmin: req.user,
+        });
+
+        const fullChat = await Chat.findOne({ _id: groupChat._id })
+        .populate("users", "-password")
+        .populate("groupAdmin", "-password")
+
+        
+        res.status(200).send(groupChat);
+    }
+    catch (err) {
+        res.status(400).json({ message: "Invalid chat data" });
+    }
+});
+
 export { accessChat, fetchChat };
