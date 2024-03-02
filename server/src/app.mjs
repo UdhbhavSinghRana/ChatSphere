@@ -22,8 +22,6 @@ app.use('/api/users', userRouter);
 app.use('/api/chat', chatRouter);
 
 
-// Use the cors middleware to enable CORS for all routes
-
 
 const server = createServer(app);
 const io = new Server(server, {

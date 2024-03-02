@@ -97,4 +97,40 @@ const createGroupChat = expressAsyncHandler(async (req, res) => {
     }
 });
 
-export { accessChat, fetchChat };
+const renameGroupChat = expressAsyncHandler(async (req, res) => {
+    if (!req.body.chatId || !req.body.chatName) {
+        return res.status(400).json({ message: "Please fill all the fields" });
+    }
+
+    const updatedChat = await Chat.findByIdAndUpdate(
+        req.body.chatId,
+        { chatName: req.body.chatName },
+        { new: true }
+    );
+
+    if (updatedChat) {
+        res.status(200).send(updatedChat);
+    }
+    else {
+        res.status(400).json({ message: "Invalid chat data" });
+    }
+    
+});
+
+const groupAdd = expressAsyncHandler(async (req, res) => {
+    if (!req.body.chatId || !req.body.users) {
+        return res.status(400).json({ message: "Please fill all the fields" });
+    }
+    var users = JSON.parse(req.body.users);
+    var chat = await Chat.findById(req.body.chatId);
+    if (chat) {
+        chat.users = chat.users.concat(users);
+        chat.save();
+        res.status(200).send(chat);
+    }
+    else {
+        res.status(400).json({ message: "Invalid chat data" });
+    }
+});
+
+export { accessChat, fetchChat, createGroupChat, renameGroupChat, groupAdd };
