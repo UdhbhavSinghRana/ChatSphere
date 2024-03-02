@@ -80,6 +80,38 @@ const allUsers = async (req, res) => {
     }
 }
 
+const addFriend = expressAsyncHandler (async (req, res) => {
+    const friendId = req.body.friendId;
+    const user = await User.findById(req.user._id);
+    const friend = await User.findById(friendId);
+    if (!friend) {
+        res.status(404).json({message: "User not found"});
+        return;
+    }
+    if (user.friends.includes(friendId)) {
+        res.status(400).json({message: "User already added"});
+        return;
+    }
+    user.friends.push(friendId);
+    friend.friends.push(req.user._id);
+    await user.save();
+    await friend.save();
+    res.status(200).json({message: "User added successfully"});
+});
+
+const getFriends = expressAsyncHandler (async (req, res) => {
+    console.log(req.user._id);
+    try {
+        const user = await User.findById(req.user._id);
+        const friends = await User.find({_id: {$in: user.friends}});
+        res.status(200).json(friends);
+    }
+    catch (err) {
+        res.status(400).json({message: "Invalid user data"});
+    }
+    
+});
 
 
-export {registerUser, authUser, allUsers};
+
+export {registerUser, authUser, allUsers, addFriend, getFriends};

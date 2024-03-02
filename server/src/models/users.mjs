@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    friends: {
+        type: Array,
+        required: true,
+        default: [],
+    },
     isAdmin: {
         type: Boolean,
         required: true,
