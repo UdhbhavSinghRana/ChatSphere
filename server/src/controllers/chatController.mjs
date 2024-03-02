@@ -121,7 +121,7 @@ const groupAdd = expressAsyncHandler(async (req, res) => {
     if (!req.body.chatId || !req.body.users) {
         return res.status(400).json({ message: "Please fill all the fields" });
     }
-    var users = JSON.parse(req.body.users);
+    var users = req.body.users;
     var chat = await Chat.findById(req.body.chatId);
     if (chat) {
         chat.users = chat.users.concat(users);
@@ -133,4 +133,19 @@ const groupAdd = expressAsyncHandler(async (req, res) => {
     }
 });
 
-export { accessChat, fetchChat, createGroupChat, renameGroupChat, groupAdd };
+const removeFromGroup = expressAsyncHandler(async (req, res) => {
+    if (!req.body.chatId || !req.body.userId) {
+        return res.status(400).json({ message: "Please fill all the fields" });
+    }
+    var chat = await Chat.findById(req.body.chatId);
+    if (chat) {
+        chat.users = chat.users.filter((user) => user != req.body.userId);
+        chat.save();
+        res.status(200).send(chat);
+    }
+    else {
+        res.status(400).json({ message: "Invalid chat data" });
+    }
+});
+
+export { accessChat, fetchChat, createGroupChat, renameGroupChat, groupAdd, removeFromGroup };
