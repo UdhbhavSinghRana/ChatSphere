@@ -53,7 +53,7 @@ const ChattingArea = () => {
 
     return (
         <>
-            {isConnected && (
+            {isConnected  && (
                 <div className='flex flex-col w-full'>
                     <div className='flex items-center text-white min-h-16 px-5 shadow-lg'>
                         {/* TODO: Here goes the username of person you are talking to*/}

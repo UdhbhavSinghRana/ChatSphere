@@ -89,13 +89,13 @@
                             "Content-Type": "application/json",
                         },
                     };
-                    const {data} = await    .post(
+                    const {data} = await axios.post(
                         "http://localhost:3000/api/users",
                         { name: Name, password: Password, email: Email },
                         config
                     );
                     localStorage.setItem("userInfo", JSON.stringify(data));
-                    navigate("/chat");
+                    navigate("/");
                 }
                 catch (err) {
                     console.log(err);
