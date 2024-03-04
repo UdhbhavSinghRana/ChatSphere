@@ -9,7 +9,6 @@ const Home = () => {
             <Sidenav />
             <ChattingArea />
         </div>
-            {/* <SignIn /> */}
         </>
         
     )

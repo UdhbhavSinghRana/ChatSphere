@@ -48,7 +48,7 @@ app.get('/health', (_req, res) => {
 })
 
 
-app.use(notFound);
+//app.use(notFound);
 app.use(errorHandler);
 
 // Mongoose connection

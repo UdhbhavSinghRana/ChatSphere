@@ -112,6 +112,25 @@ const getFriends = expressAsyncHandler (async (req, res) => {
     
 });
 
+const getById = expressAsyncHandler (async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        res.status(200).json(user);
+    }
+    catch (err) {
+        res.status(400).json({message: "Invalid user data"});
+    }
+});
+
+const getUserById = expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id).select("-password");
+    if (user) {
+        res.json(user);
+    } else {
+        res.status(404).json({ message: "User not found" });
+    }
+});
 
 
-export {registerUser, authUser, allUsers, addFriend, getFriends};
+
+export {registerUser, authUser, allUsers, addFriend, getFriends, getById, getUserById};

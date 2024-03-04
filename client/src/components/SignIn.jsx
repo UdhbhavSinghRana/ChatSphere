@@ -91,7 +91,7 @@
                     };
                     const {data} = await axios.post(
                         "http://localhost:3000/api/users",
-                        { name: Name, password: Password, email: Email },
+                        { name: Name, password: Password, email: Email},
                         config
                     );
                     localStorage.setItem("userInfo", JSON.stringify(data));
@@ -115,12 +115,11 @@
                     };
                     const {data} = await axios.post(
                         "http://localhost:3000/api/users/login",
-                        { email: Email, password: Password },
+                        { email: Email, password: Password},
                         config
                     );
                     localStorage.setItem("userInfo", JSON.stringify(data));
-                    navigate("/chat");
-                
+                    navigate("/");
                 }
                 catch (err) {
                     console.log(err);
