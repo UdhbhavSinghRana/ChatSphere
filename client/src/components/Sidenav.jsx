@@ -1,9 +1,14 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Users } from "./Users";
 
 const Sidenav = () => {
     const [friendArr, setFriendArr] = useState([]);
-
+    const [search, setSearch] = useState('');
+    const [searchedUser, setSearchUser] = useState([]);
+    const sliderRef = useRef(null);
+    const friendsRef = useRef(null);
+    const [sliderHandler, setSliderHandler] = useState(false);
     const getFriendData = async () => {
         try {
             const currId = JSON.parse(localStorage.getItem("userInfo"))._id;
@@ -29,20 +34,73 @@ const Sidenav = () => {
         }
     }
 
+    const searchUser = async (e) => {
+        e.preventDefault();
+        try {
+            const {data} = await axios.get(`http://localhost:3000/api/users?search=${search}`, {
+                headers: {
+                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).token}`
+                }
+            });
+            const serachPromise = data.map(async (user) => {
+                const { data } = await axios.get(`http://localhost:3000/api/users/${user._id}`, {
+                    headers: {
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).token}`
+                    }
+                });
+                return data;
+            });
+            const searchData = await Promise.all(serachPromise);
+            setSearchUser(searchData);
+            console.log(searchData);
+            console.log(data);
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
     useEffect(() => {
         getFriendData();
     }, []);
+    const slider = () => {
+        if (!sliderHandler) {
+            sliderRef.current.className = 'flex flex-col h-full w-full bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out';
+        }
+        else {
+            sliderRef.current.className = 'flex flex-col h-full w-full bg-[#21374f] -translate-x-full transition-all duration-500 ease-in-out';
+        }
+        setSliderHandler(!sliderHandler);
+    }
     return (
-        <div className='flex flex-col h-full w-1/4 bg-[#21374f]'>
-            <div className='flex items-center text-white min-h-16 px-5 shadow-xl'>
-                ChatSphere
+        <>
+        <div className="w-1/4 relative">
+            <div className='absolute flex flex-col h-full w-full bg-[#21374f] transition-all duration-500 ease-in-out ' ref={friendsRef}>
+                <form onSubmit={searchUser}>
+                    <div className='flex items-center text-white min-h-16 px-5 shadow-xl'>
+                        <button className="border-2 border-[#21374f] p-2 rounded-md shadow-md bg-[#27415d] hover:bg-[#21374f]" onClick={slider}>Search</button>
+                    </div>
+                </form>
+                {friendArr.map((friend, index) => (
+                    <Users key={index} user={friend} />
+                ))}
             </div>
-            {friendArr.map((friend, index) => (
-                <div key={index} className='flex items-center text-white min-h-16 px-5 shadow-sm'>
-                    {friend.name}
-                </div>
-            ))}
+            <div className='absolute flex-col h-full w-full bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out ' ref={sliderRef}>
+                <form onSubmit={searchUser}>
+                    <div className='flex items-center text-white min-h-16 px-5 shadow-xl'>
+                        <div className="flexw-full h-10 p-2 rounded-md shadow-md bg-[#243c57]  ">
+                            <button onClick={slider}>go Back</button>
+                            <input type="text" className="bg-inherit w-1/2 mx-2 hover:bg-[#223448]  " placeholder="Search" onChange={(e) => setSearch(e.target.value)}/>
+                        </div>
+                    </div>
+                </form>
+                {searchedUser.map((user, index) => (
+                    <Users key={index} user={user}/>
+                ))}
+            </div>
         </div>
+        
+        </>
     );
 }
 
