@@ -2,9 +2,9 @@ import axios from 'axios';
 import React from 'react'
 
 export const Users = ({user}) => {
-    console.log(user._id);  
-    const fetchChat = async() => {
-        const {data} = await axios.post('http://localhost:3000/api/chat', {
+        console.log(user._id);  
+        const fetchChat = async() => {
+        const {data} = await axios.get('http://localhost:3000/api/chat', {
             users: user._id
         }, {
             headers: {

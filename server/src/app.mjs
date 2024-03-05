@@ -8,6 +8,8 @@ import cors from 'cors'; // Import the cors middleware
 import User from './models/users.mjs';
 import { notFound, errorHandler } from '../src/middleware/errorHandler.mjs';
 import chatRouter from './routes/chatRouter.mjs';
+import messageRouter  from './routes/messageRouter.mjs'
+
 dotenv.config();
 
 const MONGO_URI = process.env.MONGO_URI; 
@@ -20,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/users', userRouter);
 app.use('/api/chat', chatRouter);
+app.use('/api/message', messageRouter);
 
 
 
