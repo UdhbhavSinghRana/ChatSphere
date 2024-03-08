@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useEffect } from 'react'
+import socket from '../socket';
 import { ChatState } from '../context/ChatProvider';
 
+var selectedChatCompare;
 const UserChat = ({userReciever}) => {
         const userRecieverId = userReciever._id;
         const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
@@ -16,6 +18,10 @@ const UserChat = ({userReciever}) => {
               const { data } = await axios.get("http://localhost:3000/api/chat", config);
               setChats(data);
               setSelectedChat(data.find((chat) => chat.users.find((user) => user._id === userRecieverId)));
+              
+              selectedChatCompare = selectedChat;
+
+              socket.emit('join-room', selectedChat._id);
             } catch (error) {
               console.error(error);
             }

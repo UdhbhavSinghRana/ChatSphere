@@ -37,6 +37,26 @@ const io = new Server(server, {
 io.on("connection", socket => {
     console.log(`${socket.id} connected`);
 
+    socket.on("setup", (userData) => {
+        console.log(userData);
+        socket.join(userData._id);
+        socket.emit("connected");
+    })
+
+    socket.on("join-room", room => {
+        socket.join(room);
+    });
+
+    socket.on("new message", (message) => {
+        var chat = message.chat;
+        if (!chat.users) return console.log("Chat.users not defined");
+
+        chat.users.forEach(user => {
+            if (user._id === message.sender._id) return;
+            socket.emit(`message received ${user._id}`, message);
+        });
+    });
+
     socket.on("send-message", message => {
         socket.broadcast.emit("receive-message", message);
     });
