@@ -1,31 +1,28 @@
 import axios from 'axios';
-import React, { useEffect } from 'react'
+import { useContext } from 'react'
 import socket from '../socket';
-import { ChatState } from '../context/ChatProvider';
+import { ChatContext } from '../context/ChatProvider';
 
-var selectedChatCompare;
-const UserChat = ({userReciever}) => {
-        const userRecieverId = userReciever._id;
-        const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
-        const fetchChats = async () => {
-            try {
-              const config = {
+const UserChat = ({ userReciever }) => {
+    const userRecieverId = userReciever._id;
+    const { selectedChat, setSelectedChat, user, setChats } = useContext(ChatContext);
+    const fetchChats = async () => {
+        try {
+            const config = {
                 headers: {
-                  Authorization: `Bearer ${user.token}`,
+                    Authorization: `Bearer ${user.token}`,
                 },
-              };
-        
-              const { data } = await axios.get("http://localhost:3000/api/chat", config);
-              setChats(data);
-              setSelectedChat(data.find((chat) => chat.users.find((user) => user._id === userRecieverId)));
-              
-              selectedChatCompare = selectedChat;
+            };
 
-              socket.emit('join-room', selectedChat._id);
-            } catch (error) {
-              console.error(error);
-            }
-          };
+            const { data } = await axios.get("http://localhost:3000/api/chat", config);
+            setChats(data);
+            setSelectedChat(data.find((chat) => chat.users.find((user) => user._id === userRecieverId)));
+
+            socket.emit('join-room', selectedChat._id);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <>

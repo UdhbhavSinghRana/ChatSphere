@@ -1,22 +1,35 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 import socket from "../socket";
-import { ChatState } from "../context/ChatProvider";
 import axios from "axios";
+import { ChatContext } from "../context/ChatProvider";
 var selectedChatCompare;
 const ChattingArea = () => {
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [messages, setMessages] = useState([]);
-    const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+    const { selectedChat, user, chats, setChats } = useContext(ChatContext);
     if (!chats) {
         setChats([]);
     }
     useEffect(() => {
+        const onConnect = () => {
+            setIsConnected(true)
+        }
+
+        const onDisconnect = () => {
+            setIsConnected(false)
+        }
+
         socket.emit('setup', user);
-        socket.on('connected', () => {
-            setIsConnected(true);
-        });
+
+        socket.on('connect', onConnect);
+        socket.on('disconnect', onDisconnect);
+
+        return () => {
+            socket.off('connect', onConnect);
+            socket.off('disconnect', onDisconnect);
+        }
     }, [])
 
     const getChatData = async () => {
@@ -38,13 +51,13 @@ const ChattingArea = () => {
         }
     }
 
-    
+
 
     useEffect(() => {
         socket.on('new message', (message) => {
             if (!selectedChatCompare || selectedChatCompare._id !== message.chat._id) {
                 // give notification
-            } 
+            }
             else {
                 setMessages(prevMessages => {
                     return [...prevMessages, message];
@@ -62,7 +75,7 @@ const ChattingArea = () => {
         const id = selectedChat._id;
         console.log(id);
         const { data } = await axios.post('http://localhost:3000/api/message', { chatId: id, content: message }, config);
-        
+
         socket.emit('new message', data);
     }
     useEffect(() => {
