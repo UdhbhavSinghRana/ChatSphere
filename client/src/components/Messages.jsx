@@ -1,9 +1,9 @@
-import { useRef, useEffect } from "react";
-import { ChatState } from "../context/ChatProvider";
+import { useRef, useEffect, useContext } from "react";
+import { ChatContext } from "../context/ChatProvider";
 
 const Messages = ({ messages }) => {
     const messageLogsRef = useRef(null);
-    const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState();
+    const { user } = useContext(ChatContext);
 
     useEffect(() => {
         messageLogsRef.current?.scrollIntoView({
