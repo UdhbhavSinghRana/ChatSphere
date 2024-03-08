@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Users } from "./Users";
-
+import UserChat from './UserChat';
 const Sidenav = () => {
     const [friendArr, setFriendArr] = useState([]);
     const [search, setSearch] = useState('');
@@ -9,6 +8,7 @@ const Sidenav = () => {
     const sliderRef = useRef(null);
     const friendsRef = useRef(null);
     const [sliderHandler, setSliderHandler] = useState(false);
+    
     const getFriendData = async () => {
         try {
             const currId = JSON.parse(localStorage.getItem("userInfo"))._id;
@@ -82,7 +82,7 @@ const Sidenav = () => {
                     </div>
                 </form>
                 {friendArr.map((friend, index) => (
-                    <Users key={index} user={friend} />
+                    <UserChat key={index} userReciever={friend} />
                 ))}
             </div>
             <div className='absolute flex-col h-full w-full bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out ' ref={sliderRef}>
@@ -95,7 +95,7 @@ const Sidenav = () => {
                     </div>
                 </form>
                 {searchedUser.map((user, index) => (
-                    <Users key={index} user={user}/>
+                    <UserChat key={index} userReciever={user}/>
                 ))}
             </div>
         </div>

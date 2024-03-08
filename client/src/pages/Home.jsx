@@ -10,8 +10,8 @@ const Home = () => {
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem("userInfo"));
         
-        if(user) navigate('/');
-    })
+        if(!user) navigate('/signin');
+    }, [])
     return (
         <>
         <div className="flex h-full bg-[#152639]">
