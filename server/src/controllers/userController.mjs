@@ -100,7 +100,6 @@ const addFriend = expressAsyncHandler (async (req, res) => {
 });
 
 const getFriends = expressAsyncHandler (async (req, res) => {
-    console.log(req.user._id);
     try {
         const user = await User.findById(req.user._id);
         const friends = await User.find({_id: {$in: user.friends}});
