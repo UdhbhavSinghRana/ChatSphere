@@ -1,12 +1,30 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import socket from "../socket";
+import { ChatContext } from "../context/ChatProvider";
+import axios from "axios";
 
 const MessageInput = ({ onSendMessage }) => {
     const [inputMessage, setInputMessage] = useState('');
+    const { selectedChat } = useContext(ChatContext);
 
-    const handleSendMessage = (event) => {
+    const handleSendMessage = async (event) => {
         event.preventDefault();
         if (inputMessage.length === 0) return;
+        
 
+        const config = {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).token}`,
+            },
+        };
+
+        const { data } = await axios.post("http://localhost:3000/api/message", {
+            chatId: selectedChat._id,
+            content: inputMessage,
+        }, config);
+
+        
+        socket.emit('send-message', inputMessage);
         onSendMessage(inputMessage);
         setInputMessage('');
     }

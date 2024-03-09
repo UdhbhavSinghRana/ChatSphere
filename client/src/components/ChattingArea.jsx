@@ -47,7 +47,7 @@ const ChattingArea = () => {
             const { data } = await axios.get(`http://localhost:3000/api/message/${id}`, config);
             console.log(data);
             setMessages(data);
-            socket.emit('join-room', id);
+            socket.emit('join room', id);
         }
         catch (error) {
             console.error(error);
