@@ -33,6 +33,9 @@ const ChattingArea = () => {
     }, [])
 
     const getChatData = async () => {
+        if (!selectedChat) {
+            return;
+        }
         try {
             const config = {
                 headers: {
@@ -88,7 +91,7 @@ const ChattingArea = () => {
                 <div className='flex flex-col w-full'>
                     <div className='flex items-center text-white min-h-16 px-5 shadow-lg'>
                         {/* TODO: Here goes the username of person you are talking to*/}
-                        Testing User
+                        {selectedChat ? selectedChat.users.find((user) => user._id !== JSON.parse(localStorage.getItem("userInfo"))._id).name : ""}
                     </div>
                     <Messages messages={messages} />
                     <MessageInput onSendMessage={handleSentMessage} />

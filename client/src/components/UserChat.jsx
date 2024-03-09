@@ -18,6 +18,11 @@ const UserChat = ({ userReciever }) => {
             setChats(data);
             setSelectedChat(data.find((chat) => chat.users.find((user) => user._id === userRecieverId)));
 
+            if (!selectedChat) {
+                const { data } = await axios.post("http://localhost:3000/api/chat", { userId: userRecieverId }, config);
+                setSelectedChat(data);
+            }
+            console.log(selectedChat);
             socket.emit('join-room', selectedChat._id);
         } catch (error) {
             console.error(error);
