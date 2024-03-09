@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import socket from '../socket';
 import { ChatContext } from '../context/ChatProvider';
 
@@ -22,8 +22,7 @@ const UserChat = ({ userReciever }) => {
                 const { data } = await axios.post("http://localhost:3000/api/chat", { userId: userRecieverId }, config);
                 setSelectedChat(data);
             }
-            console.log(selectedChat);
-            socket.emit('join-room', selectedChat._id);
+            socket.emit('join chat', selectedChat._id);
         } catch (error) {
             console.error(error);
         }

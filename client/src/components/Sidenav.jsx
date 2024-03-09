@@ -16,7 +16,6 @@ const Sidenav = () => {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).token}`
                 }
-
             });
             const friendPromises = data.friends.map(async (friend) => {
                 const { data } = await axios.get(`http://localhost:3000/api/users/${friend}`, {
@@ -52,8 +51,6 @@ const Sidenav = () => {
             });
             const searchData = await Promise.all(serachPromise);
             setSearchUser(searchData);
-            console.log(searchData);
-            console.log(data);
         }
         catch (err) {
             console.log(err);
@@ -63,6 +60,7 @@ const Sidenav = () => {
     useEffect(() => {
         getFriendData();
     }, []);
+
     const slider = () => {
         if (!sliderHandler) {
             sliderRef.current.className = 'flex flex-col h-full w-full bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out';
