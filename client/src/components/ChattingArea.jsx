@@ -1,8 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Messages from "./Messages";
 import socket from "../socket";
 import axios from "axios";
 import { ChatContext } from "../context/ChatProvider";
+import VideoBar from "./VideoBar";
+import Video from "./Video";
 var selectedChatCompare;
 const ChattingArea = () => {
     const [isConnected, setIsConnected] = useState(socket.connected);
@@ -11,10 +13,16 @@ const ChattingArea = () => {
     const [inputMessage, setInputMessage] = useState('');
     const [typing, setTyping] = useState(false);
     const [istyping, setIsTyping] = useState(false);
+    const friendButtonRef = useRef(null);
+    const userButton = useRef(null);
+    const [peersStream, setPeersStream] = useState([]);
+    const [video, setVideo] = useState(false);
+    const [stream, setStream] = useState(null);
     
     if (!chats) {
         setChats([]);
     }
+
     useEffect(() => {
         const onConnect = () => {
             setIsConnected(true)
@@ -96,15 +104,54 @@ const ChattingArea = () => {
         selectedChatCompare = selectedChat;
     }, [selectedChat]);
 
+    const handleUserInfo = () => {
+        friendButtonRef.current.classList.toggle('hidden');
+    }
+
+    const handleFriendReq = async () => {
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            };
+            const friendId = selectedChat.users.find((user) => user._id !== JSON.parse(localStorage.getItem("userInfo"))._id)._id;
+            console.log(friendId);
+            const { data } = await axios.put('http://localhost:3000/api/users/addFriend', { friendId: friendId }, config)
+            console.log(data);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleUserClick = () => {
+        userButton.current.classList.toggle('hidden');
+    }
+
+    const handleLogOut = () => {
+        localStorage.removeItem("userInfo");
+        window.location.reload();
+    }
+
     return (
         <>
             {isConnected && (
                 <div className='flex flex-col w-full'>
                     <div className='flex items-center  text-white min-h-16 px-5 shadow-lg'>
                         {/* TODO: Here goes the username of person you are talking to*/}
-                        {selectedChat ? selectedChat.users.find((user) => user._id !== JSON.parse(localStorage.getItem("userInfo"))._id).name : ""}
-                        <div className="flex justify-end w-full">
+                        <div onClick={handleUserInfo}>
+                            {selectedChat ? selectedChat.users.find((user) => user._id !== JSON.parse(localStorage.getItem("userInfo"))._id).name : ""}
+                        </div>
+                        {selectedChat ? <div className="w-32 px-10 " onClick={handleVideo}> Video </div> : <div></div>}
+                        <div ref={friendButtonRef} onClick={handleFriendReq} className="absolute translate-y-12 shadow-md p-2 bg-[#1d2c3b] rounded-md -translate-x-5 hidden">
+                            Add Friend
+                        </div>
+                        <div className="flex justify-end w-full" onClick={handleUserClick}>
                             {user.name}
+                        </div>
+                        <div ref={userButton} onClick={handleLogOut} className="translate-y-12 -translate-x-14 shadow-md p-2 bg-[#1d2c3b] rounded-md hidden">
+                            LogOut
                         </div>
                     </div>
                     <Messages messages={messages} />

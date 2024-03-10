@@ -37,6 +37,8 @@ const io = new Server(server, {
 io.on("connection", socket => {
     console.log(`${socket.id} connected`);
 
+    
+
     socket.on("setup", (userData) => {
         console.log(userData);
         socket.join(userData._id);

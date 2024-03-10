@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import socket from '../socket';
 import { ChatContext } from '../context/ChatProvider';
 
 const UserChat = ({ userReciever }) => {
     const userRecieverId = userReciever._id;
     const { selectedChat, setSelectedChat, user, setChats } = useContext(ChatContext);
+    const userRef = useRef(null);
     const fetchChats = async () => {
         try {
             const config = {
@@ -30,7 +31,7 @@ const UserChat = ({ userReciever }) => {
 
     return (
         <>
-            <div className='flex items-center text-white min-h-16 px-5 shadow-sm hover:bg-[#1d2c3b]' onClick={() => fetchChats()}>
+            <div ref={userRef} className='flex items-center text-white min-h-16 px-5 shadow-sm hover:bg-[#1d2c3b]' onClick={() => fetchChats()}>
                 {userReciever.name}
             </div>
         </>
