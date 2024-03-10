@@ -55,7 +55,8 @@ io.on("connection", socket => {
 
         if (!chat.users) return console.log("chat.users not defined");
 
-        console.log("emtting to :" + chat._id);
+        console.log("emitting message to " + chat._id);
+
         socket.in(chat._id).emit("message received", newMessageRecieved);
     });
 
