@@ -36,13 +36,11 @@ const ChattingArea = () => {
     }, [])
     useEffect(() => {
         socket.on("message received", (newMessageRecieved) => {
-            if (!selectedChatCompare || selectedChat._id !== newMessageRecieved.chat._id) {
-                // give notification
+            if (newMessageRecieved.chat._id !== selectedChat._id) {
+                return;
             }
-            else {
-                console.log(messages);
-                setMessages([...messages, newMessageRecieved]);
-            }
+            console.log(messages);
+            setMessages([...messages, newMessageRecieved]);
         })
     })
 
