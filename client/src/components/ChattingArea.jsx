@@ -40,6 +40,7 @@ const ChattingArea = () => {
                 // give notification
             }
             else {
+                console.log(messages);
                 setMessages([...messages, newMessageRecieved]);
             }
         })
@@ -83,6 +84,7 @@ const ChattingArea = () => {
                 };
                 const { data } = await axios.post("http://localhost:3000/api/message", message, config);
                 socket.emit("new message", data);
+                data.sender = user._id;
                 setMessages([...messages, data]);
                 setInputMessage('');
             }
@@ -95,8 +97,6 @@ const ChattingArea = () => {
         getChatData();
         selectedChatCompare = selectedChat;
     }, [selectedChat]);
-
-    
 
     return (
         <>
