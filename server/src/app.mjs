@@ -37,10 +37,9 @@ const io = new Server(server, {
 io.on("connection", socket => {
     console.log(`${socket.id} connected`);
 
-    
+    socket.emit("me", socket.id)
 
     socket.on("setup", (userData) => {
-        console.log(userData);
         socket.join(userData._id);
         socket.emit("connected");
     })
@@ -48,7 +47,18 @@ io.on("connection", socket => {
     socket.on("join chat", (room) => {
         socket.join(room);
         console.log("User Joined Room: " + room);
-    });
+    })
+
+    socket.on("callUser", (data) => {
+        console.log("calling :" + data.userToCall);
+        io.in(data.userToCall).emit("callUser", { signal: data.signalData, from: data.from, name: data.name });
+    })
+
+    socket.on("answerCall", (data) => {
+        console.log("calling :" + data.to);
+        io.in(data.to).emit("callAccepted", data.signal)
+    })
+
     socket.on("typing", (room) => socket.in(room).emit("typing"));
     socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 

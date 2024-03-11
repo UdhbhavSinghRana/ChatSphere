@@ -3,8 +3,11 @@ import Messages from "./Messages";
 import socket from "../socket";
 import axios from "axios";
 import { ChatContext } from "../context/ChatProvider";
-import VideoBar from "./VideoBar";
+import Peer from "simple-peer"
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Video from "./Video";
+
+
 var selectedChatCompare;
 const ChattingArea = () => {
     const [isConnected, setIsConnected] = useState(socket.connected);
@@ -15,10 +18,97 @@ const ChattingArea = () => {
     const [istyping, setIsTyping] = useState(false);
     const friendButtonRef = useRef(null);
     const userButton = useRef(null);
-    const [peersStream, setPeersStream] = useState([]);
-    const [video, setVideo] = useState(false);
-    const [stream, setStream] = useState(null);
-    
+
+    const [calling, setCalling] = useState(false);
+    const [stream, setStream] = useState();
+    const [caller, setCaller] = useState('');
+    const [callerSignal, setCallerSignal] = useState('');
+    const [callAccepted, setCallAccepted] = useState(false);
+    const [idToCall, setIdToCall] = useState('');
+    const [callEnded, setCallEnded] = useState(false);
+    const [recevingCall, setRecevingCall] = useState(false);
+    const [me, setMe] = useState('');
+
+    const [myVideoStream, setMyVideoStream] = useState();
+    const [userVideoStream, setUserVideoStream] = useState();
+
+    const myVideo = useRef();
+    const userVideo = useRef();
+    const connectionRef = useRef();
+
+    useEffect(() => {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
+                setStream(stream);
+                console.log(stream);
+                setMyVideoStream(stream);
+            }); 
+
+            socket.on("me", (id) => {
+                setMe(id);
+            });
+
+            socket.on("callUser", (data) => {
+                setRecevingCall(true);
+                setCaller(data.from);
+                setCallerSignal(data.signal);
+            });
+    }, []);
+
+    const callUser = (id) => {
+        console.log(id);
+        const peer = new Peer({  // could cause an error
+            initiator: true,
+            trickle: false,
+            stream: stream,
+        });
+
+        peer.on("signal", (data) => {
+            socket.emit("callUser", { 
+                userToCall: id, 
+                signalData: data, 
+                from: me, 
+                name: user.name
+            });
+        })
+
+        peer.on("stream", (stream) => {
+            setUserVideoStream(stream);
+        })
+
+        peer.on("callAccepted", (signal) => {
+            setCallAccepted(true);
+            peer.signal(signal);
+        })
+
+        connectionRef.current = peer;
+    }
+
+    const answerCall = () => {
+        setCallAccepted(true);
+        const peer = new Peer({
+            initiator: false,
+            trickle: false,
+            stream: stream,
+        });
+
+        peer.on("signal", (data) => {
+            socket.emit("answerCall", { signal: data, to: caller });
+        })
+
+        peer.on("stream", (stream) => {
+            console.log(stream);
+            setUserVideoStream(stream);
+        })
+
+        peer.signal(callerSignal);
+        connectionRef.current = peer;
+    }
+
+    const leaveCall = () => {
+        setCallEnded(true);
+        connectionRef.current.destroy();
+    }
+
     if (!chats) {
         setChats([]);
     }
@@ -134,6 +224,7 @@ const ChattingArea = () => {
         window.location.reload();
     }
 
+
     return (
         <>
             {isConnected && (
@@ -143,7 +234,35 @@ const ChattingArea = () => {
                         <div onClick={handleUserInfo}>
                             {selectedChat ? selectedChat.users.find((user) => user._id !== JSON.parse(localStorage.getItem("userInfo"))._id).name : ""}
                         </div>
-                        {selectedChat ? <div className="w-32 px-10 " onClick={handleVideo}> Video </div> : <div></div>}
+                        <CopyToClipboard text={me}>
+                            <div className="ml-2 cursor-pointer">Copy</div>
+                        </CopyToClipboard>
+
+                        <input onChange={(e) => setIdToCall(e.target.value)} value={idToCall} className="text-black" />
+
+                        <div className="video-container ">
+                                {console.log(myVideoStream)}
+                                {stream && <Video width={300} media={myVideoStream} muted={true} />}
+                                {callAccepted && !callEnded ? <Video width={300} media={userVideoStream} muted={false}/>: <div></div>}
+                        </div>
+                        {recevingCall && !callAccepted && (
+                            <div>
+                                <button onClick={answerCall}>Answer</button>
+                            </div>
+                        )}
+                    <div className="call-button">
+                        {callAccepted && !callEnded ? (
+                            <button variant="contained" color="secondary" onClick={leaveCall}>
+                                End Call
+                            </button>
+                        ) : (
+                            <button className=" m-2 p-3 shadow-xl border-2 hover:bg-slate-900 " onClick={() => callUser(idToCall)}>
+                                Call
+                            </button>
+                        )}
+                        {idToCall}
+				    </div>
+                        
                         <div ref={friendButtonRef} onClick={handleFriendReq} className="absolute translate-y-12 shadow-md p-2 bg-[#1d2c3b] rounded-md -translate-x-5 hidden">
                             Add Friend
                         </div>
