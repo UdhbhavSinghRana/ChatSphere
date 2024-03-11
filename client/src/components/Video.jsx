@@ -1,22 +1,11 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
 const Video = ({ media, width, height, muted, children }) => {
-  const videoRef = useRef(null);
-  console.log(media)
-
-  useEffect(() => {
-    let timeout = null;
-
-    if (media) {
-      timeout = setTimeout(() => {
-        videoRef.current.srcObject = media;
-      }, 1000);
-    }
-
-    return () => {
-      clearTimeout(timeout);
-    };
+  let videoRef = React.createRef();
+  console.log(media);
+  React.useEffect(() => {
+    videoRef.current.srcObject = media;
   }, [media]);
 
   return (
