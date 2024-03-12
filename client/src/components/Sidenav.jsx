@@ -72,7 +72,7 @@ const Sidenav = () => {
     }
     return (
         <>
-            <div className="w-1/4 relative">
+            <div className="w-1/4 relative overflow-auto">
                 <div className='absolute flex flex-col h-full w-full bg-[#21374f] transition-all duration-500 ease-in-out ' ref={friendsRef}>
                     <form onSubmit={searchUser}>
                         <div className='flex items-center text-white min-h-16 px-5 shadow-xl'>
@@ -83,7 +83,7 @@ const Sidenav = () => {
                         <UserChat key={index} userReciever={friend} />
                     ))}
                 </div>
-                <div className='absolute flex-col h-full w-full bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out ' ref={sliderRef}>
+                <div className='absolute flex-col h-full w-full bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out overflow-auto' ref={sliderRef}>
                     <form onSubmit={searchUser}>
                         <div className='flex items-center text-white min-h-16 px-5 shadow-xl'>
                             <div className="flexw-full h-10 p-2 rounded-md shadow-md bg-[#243c57]  ">
