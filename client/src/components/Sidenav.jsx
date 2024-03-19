@@ -1,4 +1,5 @@
 import axios from "axios";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useRef, useState } from "react";
 import UserChat from './UserChat';
 const Sidenav = () => {
@@ -87,7 +88,9 @@ const Sidenav = () => {
                     <form onSubmit={searchUser}>
                         <div className='flex items-center text-white min-h-16 px-5 shadow-xl'>
                             <div className="flexw-full h-10 p-2 rounded-md shadow-md bg-[#243c57]  ">
-                                <button onClick={slider}>go Back</button>
+                                <button onClick={slider}>
+                                    <ArrowBackIcon />
+                                </button>
                                 <input type="text" className="bg-inherit w-1/2 mx-2 hover:bg-[#223448]  " placeholder="Search" onChange={(e) => setSearch(e.target.value)} />
                             </div>
                         </div>

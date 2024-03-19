@@ -6,8 +6,10 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import { useContext, useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import Peer from "simple-peer"
+import VideoCallIcon from '@mui/icons-material/VideoCall';
 import io from "socket.io-client"
 import "./App.css"
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import socket from '../socket';
 import Messages from "./Messages";
 import axios from "axios";
@@ -31,12 +33,13 @@ function App() {
 
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [messages, setMessages] = useState([]);
-    const { selectedChat, user, chats, setChats } = useContext(ChatContext);
+    const { selectedChat, user, chats, setChats, isCalling, setIscalling } = useContext(ChatContext);
     const [inputMessage, setInputMessage] = useState('');
     const [typing, setTyping] = useState(false);
     const [istyping, setIsTyping] = useState(false);
     const friendButtonRef = useRef(null);
     const userButton = useRef(null);
+    const [someoneCalling, setSomeonecalling] = useState(false);
 
 
 	useEffect(() => {
@@ -74,7 +77,7 @@ function App() {
             socket.off('disconnect', onDisconnect);
         }
 
-	}, [selectedChat])
+	}, [selectedChat, isCalling])
 
 
 
@@ -88,7 +91,7 @@ function App() {
         })
     })
 
-
+    
 
 	const callUser = (id) => {
 		const peer = new Peer({
@@ -101,7 +104,7 @@ function App() {
 				userToCall: id,
 				signalData: data,
 				from: me,
-				name: name
+				name: user.name
 			})
 		})
 		peer.on("stream", (stream) => {
@@ -136,6 +139,7 @@ function App() {
 	const leaveCall = () => {
 		setCallEnded(true)
 		connectionRef.current.destroy()
+        setIscalling(!isCalling);
 	}
 
     const getChatData = async () => {
@@ -214,10 +218,17 @@ function App() {
         localStorage.removeItem("userInfo");
         window.location.reload();
     }
+    const handleVideoCall = () => {
+        setIscalling(!isCalling);
+    }
+
+    const handleGoback = () => {
+        setIscalling(!isCalling);
+    }
     
 	return (
 		<>
-         {isConnected && (
+         {isConnected && !isCalling && (
                 <div className='flex flex-col w-full'>
                     <div className='flex items-center  text-white min-h-16 px-5 shadow-lg'>
                         {/* TODO: Here goes the username of person you are talking to*/}
@@ -228,7 +239,13 @@ function App() {
                         <div ref={friendButtonRef} onClick={handleFriendReq} className="absolute translate-y-12 shadow-md p-2 bg-[#1d2c3b] rounded-md -translate-x-5 hidden">
                             Add Friend
                         </div>
-                        <div className="flex justify-end w-full" onClick={handleUserClick}>
+                        
+                        <div className="flex justify-end w-full gap-8" onClick={handleUserClick}>
+                            <div className= '' onClick={handleVideoCall}>
+                                <button>
+                                    <VideoCallIcon />
+                                </button>
+                            </div>
                             {user.name}
                         </div>
                         <div ref={userButton} onClick={handleLogOut} className="translate-y-12 -translate-x-14 shadow-md p-2 bg-[#1d2c3b] rounded-md hidden">
@@ -262,27 +279,23 @@ function App() {
                 </div>
             )}
 
-            <div className="container">
-                <div className="video-container">
-                    <div className="video">
-                        {stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "500px" }} />}
+            {isCalling && <div className="h-full w-full flex flex-col justify-end mx-10">
+                <div className="flex gap-10 h-full">
+                    <div className="video flex h-full rounded-md">
+                            {stream &&  <video playsInline muted ref={myVideo} autoPlay className='h-full items-center justify-center rounded-md' />}
                     </div>
-                    <div className="video">
+                    <div className="video flex h-full rounded-md">
                         {callAccepted && !callEnded ?
-                        <video playsInline ref={userVideo} autoPlay style={{ width: "500px  "}} />:
+                        <video playsInline ref={userVideo} autoPlay className='h-full items-center justify-center rounded-md' />:
                         null}
                     </div>
                 </div>
-                <div className="myId">
-                    <TextField
-                        id="filled-basic"
-                        label="Name"
-                        variant="filled"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        style={{ marginBottom: "20px" }}
-                    />
-                    <CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
+                <div className='flex flex-col h-fit justify-end '>
+                <div className="bg-white flex gap-10 justify-center items-center h-fit">
+                    <button onClick={handleGoback}>
+                        <ArrowBackIcon />
+                    </button>
+                    <CopyToClipboard text={me} >
                         <Button variant="contained" color="primary" startIcon={<AssignmentIcon fontSize="large" />}>
                             Copy ID
                         </Button>
@@ -305,8 +318,8 @@ function App() {
                                 <PhoneIcon fontSize="large" />
                             </IconButton>
                         )}
-                        {idToCall}
                     </div>
+                </div>
                 </div>
                 <div>
                     {receivingCall && !callAccepted ? (
@@ -318,7 +331,7 @@ function App() {
                         </div>
                     ) : null}
                 </div>
-            </div>
+            </div>}
 		</>
 	)
 }

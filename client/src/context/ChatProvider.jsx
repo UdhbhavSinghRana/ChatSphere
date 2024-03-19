@@ -7,6 +7,7 @@ const ChatProvider = ({ children }) => {
     const [user, setUser] = useState('');
     const [selectedChat, setSelectedChat] = useState('');
     const [chats, setChats] = useState('');
+    const [isCalling, setIscalling] = useState(false);
 
     useEffect(() => {
         const localStoredUser = localStorage.getItem("userInfo");
@@ -19,7 +20,7 @@ const ChatProvider = ({ children }) => {
     }, [])
 
     return (
-        <ChatContext.Provider value={{ user, setUser, selectedChat, setSelectedChat, chats, setChats }}>
+        <ChatContext.Provider value={{ user, setUser, selectedChat, setSelectedChat, chats, setChats, isCalling, setIscalling }}>
             {children}
         </ChatContext.Provider>
     );
