@@ -77,7 +77,7 @@ function App() {
             socket.off('disconnect', onDisconnect);
         }
 
-	}, [selectedChat, isCalling])
+	}, [isCalling])
 
 
 
