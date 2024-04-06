@@ -1,8 +1,11 @@
 import { io } from "socket.io-client";
 
-const SERVER_URL = import.meta.env.SERVER_URL ?? 'http://localhost:3000'
 
-const socket = io(SERVER_URL, {
+const BASE_URL = import.meta.env.PROD
+    ? 'https://chatsphere-yuu4.onrender.com'
+    : 'http://localhost:3000';
+
+const socket = io(BASE_URL, {
     autoConnect: false
 })
 
