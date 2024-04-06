@@ -14,7 +14,6 @@ import socket from '../socket';
 import Messages from "./Messages";
 import axios from "axios";
 import { ChatContext } from "../context/ChatProvider";
-import Video from "./Video";
 
 var selectedChatCompare = null;
 function App() {
@@ -280,13 +279,13 @@ function App() {
             )}
 
             {isCalling && <div className="h-full w-full flex flex-col justify-end mx-10">
-                <div className="flex gap-10 h-full">
-                    <div className="video flex h-full rounded-md">
-                            {stream &&  <video playsInline muted ref={myVideo} autoPlay className='h-full items-center justify-center rounded-md' />}
+                <div className="flex gap-10 h-full w-full">
+                    <div className="video flex h-full w-full rounded-md">
+                            {stream &&  <video playsInline muted ref={myVideo} autoPlay className='h-full w-full items-center justify-center rounded-md' />}
                     </div>
-                    <div className="video flex h-full rounded-md">
+                    <div className="video flex h-full w-full rounded-md">
                         {callAccepted && !callEnded ?
-                        <video playsInline ref={userVideo} autoPlay className='h-full items-center justify-center rounded-md' />:
+                        <video playsInline ref={userVideo} autoPlay className='h-full items-center w-full justify-center rounded-md' />:
                         null}
                     </div>
                 </div>

@@ -64,10 +64,10 @@ const Sidenav = () => {
 
     const slider = () => {
         if (!sliderHandler) {
-            sliderRef.current.className = 'flex flex-col h-full w-full bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out';
+            sliderRef.current.className = 'flex flex-col h-fit w-full  bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out ';
         }
         else {
-            sliderRef.current.className = 'flex flex-col h-full w-full bg-[#21374f] -translate-x-full transition-all duration-500 ease-in-out';
+            sliderRef.current.className = 'flex flex-col h-full w-full bg-[#21374f] -translate-x-full transition-all duration-500 ease-in-out overflow-hidden';
         }
         setSliderHandler(!sliderHandler);
     }
@@ -84,7 +84,7 @@ const Sidenav = () => {
                         <UserChat key={index} userReciever={friend} />
                     ))}
                 </div>
-                <div className='absolute flex-col h-full w-full bg-[#21374f] -translate-x-0 transition-all duration-500 ease-in-out overflow-auto' ref={sliderRef}>
+                <div className='absolute flex-col h-fit w-full bg-[#21374f] -translate-x-full overflow-hidden transition-all duration-500 ease-in-out' ref={sliderRef}>
                     <form onSubmit={searchUser}>
                         <div className='flex items-center text-white min-h-16 px-5 shadow-xl'>
                             <div className="flexw-full h-10 p-2 rounded-md shadow-md bg-[#243c57]  ">
