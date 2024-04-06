@@ -3,6 +3,10 @@ import { useContext, useEffect, useRef } from 'react'
 import socket from '../socket';
 import { ChatContext } from '../context/ChatProvider';
 
+const BASE_URL = import.meta.env.PROD
+    ? 'https://chatsphere-yuu4.onrender.com'
+    : 'http://localhost:3000';
+
 const UserChat = ({ userReciever }) => {
     const userRecieverId = userReciever._id;
     const { selectedChat, setSelectedChat, user, setChats } = useContext(ChatContext);
@@ -15,12 +19,12 @@ const UserChat = ({ userReciever }) => {
                 },
             };
 
-            const { data } = await axios.get("http://localhost:3000/api/chat", config);
+            const { data } = await axios.get(`${BASE_URL}/api/chat`, config);
             setChats(data);
             setSelectedChat(data.find((chat) => chat.users.find((user) => user._id === userRecieverId)));
 
             if (!selectedChat) {
-                const { data } = await axios.post("http://localhost:3000/api/chat", { userId: userRecieverId }, config);
+                const { data } = await axios.post(`${BASE_URL}/api/chat`, { userId: userRecieverId }, config);
                 setSelectedChat(data);
             }
             socket.emit('join chat', selectedChat._id);

@@ -3,6 +3,11 @@ import axios from "axios";
 import socket from '../socket';
 import { ChatContext } from '../context/ChatProvider';
 
+
+const BASE_URL = import.meta.env.PROD
+    ? 'https://chatsphere-yuu4.onrender.com'
+    : 'http://localhost:3000';
+
 function SignIn() {
     const { setUser } = useContext(ChatContext);
 
@@ -87,7 +92,7 @@ function SignIn() {
                     },
                 };
                 const { data } = await axios.post(
-                    "http://localhost:3000/api/users",
+                    `${BASE_URL}/api/users`,
                     { name: Name, password: Password, email: Email },
                     config
                 );
@@ -113,7 +118,7 @@ function SignIn() {
                     },
                 };
                 const { data } = await axios.post(
-                    "http://localhost:3000/api/users/login",
+                    `${BASE_URL}/api/users/login`,
                     { email: Email, password: Password },
                     config
                 );

@@ -2,6 +2,12 @@ import axios from "axios";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useEffect, useRef, useState } from "react";
 import UserChat from './UserChat';
+
+const BASE_URL = import.meta.env.PROD
+    ? 'https://chatsphere-yuu4.onrender.com'
+    : 'http://localhost:3000';
+
+
 const Sidenav = () => {
     const [friendArr, setFriendArr] = useState([]);
     const [search, setSearch] = useState('');
@@ -13,13 +19,13 @@ const Sidenav = () => {
     const getFriendData = async () => {
         try {
             const currId = JSON.parse(localStorage.getItem("userInfo"))._id;
-            const { data } = await axios.get(`http://localhost:3000/api/users/${currId}`, {
+            const { data } = await axios.get(`${BASE_URL}/api/users/${currId}`, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).token}`
                 }
             });
             const friendPromises = data.friends.map(async (friend) => {
-                const { data } = await axios.get(`http://localhost:3000/api/users/${friend}`, {
+                const { data } = await axios.get(`${BASE_URL}/api/users/${friend}`, {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).token}`
                     }
@@ -37,13 +43,13 @@ const Sidenav = () => {
     const searchUser = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.get(`http://localhost:3000/api/users?search=${search}`, {
+            const { data } = await axios.get(`${BASE_URL}/api/users?search=${search}`, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).token}`
                 }
             });
             const serachPromise = data.map(async (user) => {
-                const { data } = await axios.get(`http://localhost:3000/api/users/${user._id}`, {
+                const { data } = await axios.get(`${BASE_URL}/api/users/${user._id}`, {
                     headers: {
                         Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).token}`
                     }

@@ -15,6 +15,10 @@ import Messages from "./Messages";
 import axios from "axios";
 import { ChatContext } from "../context/ChatProvider";
 
+const BASE_URL = import.meta.env.PROD
+    ? 'https://chatsphere-yuu4.onrender.com'
+    : 'http://localhost:3000';
+
 var selectedChatCompare = null;
 function App() {
 	const [ me, setMe ] = useState("")
@@ -39,7 +43,6 @@ function App() {
     const friendButtonRef = useRef(null);
     const userButton = useRef(null);
     const [someoneCalling, setSomeonecalling] = useState(false);
-
 
 	useEffect(() => {
 		navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
@@ -152,7 +155,7 @@ function App() {
                 },
             };
             const id = selectedChat._id;
-            const { data } = await axios.get(`http://localhost:3000/api/message/${id}`, config);
+            const { data } = await axios.get(`${BASE_URL}/api/message/${id}`, config);
             setMessages(data);
             socket.emit('join room', id);
         }
@@ -176,7 +179,7 @@ function App() {
                     chatId: selectedChat._id,
                     sender: user._id
                 };
-                const { data } = await axios.post("http://localhost:3000/api/message", message, config);
+                const { data } = await axios.post(`${BASE_URL}/api/message`, message, config);
                 socket.emit("new message", data);
                 data.sender = user._id;
                 setMessages([...messages, data]);
@@ -201,7 +204,7 @@ function App() {
             };
             const friendId = selectedChat.users.find((user) => user._id !== JSON.parse(localStorage.getItem("userInfo"))._id)._id;
             console.log(friendId);
-            const { data } = await axios.put('http://localhost:3000/api/users/addFriend', { friendId: friendId }, config)
+            const { data } = await axios.put(`${BASE_URL}/api/users/addFriend`, { friendId: friendId }, config)
             console.log(data);
         }
         catch (error) {
