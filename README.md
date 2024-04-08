@@ -1,4 +1,4 @@
-## ChatSphere
+# ChatSphere
 # Description:
 This is a real-time video chat application that enables users to connect and have face-to-face conversations with each other directly through their web browsers. It utilizes the MERN stack for efficient development and leverages the power of WebRTC for peer-to-peer audio and video streaming.
 
@@ -11,26 +11,26 @@ This is a real-time video chat application that enables users to connect and hav
     WebRTC: Peer-to-peer audio/video streaming
 
 ## Installation
-# Prerequisites
+## Prerequisites
 Node.js and npm (or yarn) installed on your system. Download them from the official Node.js website: https://nodejs.org/en
 
-# Clone the Repository
+## Clone the Repository
     git clone https://your-github-repo-url.git
 
-# Install Dependencies (Server)
+## Install Dependencies (Server)
     cd server
     npm install
 
-# Install Dependencies (Client)
+## Install Dependencies (Client)
     cd client
     npm install
-# Run Cient Side
+## Run Cient Side
     cd client
     npm run dev
-# Run Server Side
+## Run Server Side
     cd server/src
     node app.mjs
-# Features
+## Features
     User Registration and Login
     User List and Search
     Real-time Video Calling (using WebRTC)
