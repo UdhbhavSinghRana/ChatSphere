@@ -12,5 +12,27 @@ This is a real-time video chat application that enables users to connect and hav
 
 ## Installation
 # Prerequisites
+Node.js and npm (or yarn) installed on your system. Download them from the official Node.js website: https://nodejs.org/en
 
-    Node.js and npm (or yarn) installed on your system. Download them from the official Node.js website: https://nodejs.org/en
+# Clone the Repository
+    git clone https://your-github-repo-url.git
+
+# Install Dependencies (Server)
+    cd server
+    npm install
+
+# Install Dependencies (Client)
+    cd client
+    npm install
+# Run Cient Side
+    cd client
+    npm run dev
+# Run Server Side
+    cd server/src
+    node app.mjs
+# Features
+    User Registration and Login
+    User List and Search
+    Real-time Video Calling (using WebRTC)
+    Text Chat Functionality (using Sockets)
+    User Authentication and Authorization (implement security measures as needed
