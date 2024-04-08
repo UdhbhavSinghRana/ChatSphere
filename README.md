@@ -35,4 +35,4 @@ Node.js and npm (or yarn) installed on your system. Download them from the offic
     User List and Search
     Real-time Video Calling (using WebRTC)
     Text Chat Functionality (using Sockets)
-    User Authentication and Authorization (implement security measures as needed
+    User Authentication and Authorization
